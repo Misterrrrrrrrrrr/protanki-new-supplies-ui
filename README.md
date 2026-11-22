@@ -1,4 +1,4 @@
-# ProTanki New Supplies UI & Box Textures
+# ProTanki New Supplies UI & Box Textures (Browser Only)
 
 Browser extension for [ProTanki](https://pro-tanki.online/en) that changes how the supplies bar and the boxes look.
 
