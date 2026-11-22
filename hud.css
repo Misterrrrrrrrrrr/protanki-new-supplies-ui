@@ -1,0 +1,226 @@
+/* Every rule starts with :where(html:not([data-ptk-off])) (zero specificity, so the rules rank exactly as without it).
+   content.js sets data-ptk-off on <html> in SAFE MODE, which switches this whole file off at once. */
+/* Pojistka pro pozicování a zákaz efektů na samotných slotech */
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot,
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content {
+  position: relative;
+  overflow: visible !important;
+  animation: none !important;
+  transition: none !important;
+  filter: none !important;
+}
+
+/* 1. Posuneme původní herní štítek NAD ikonku */
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content flash-label.quantity-label {
+  top: auto !important;
+  bottom: calc(100% + 2px) !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+  z-index: 9998 !important;
+  visibility: visible !important;
+}
+
+/* 2. Zostříme původní canvas (pokud by se náhodou ukázal) */
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content flash-label.quantity-label canvas {
+  image-rendering: -webkit-optimize-contrast !important;
+  image-rendering: crisp-edges !important;
+  /* původní herní čísla v původní velikosti; stín se nastavuje v --count-canvas-shadow (sekce 4) */
+  filter: var(--count-canvas-shadow) !important;
+}
+
+/* Ztmavení/zešednutí i pro původní canvas při cooldownu */
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content.ptk-cd flash-label.quantity-label canvas,
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content.ptk-locked flash-label.quantity-label canvas {
+  filter: brightness(0.6) var(--count-canvas-shadow) !important;
+}
+
+/* 3. Skryjeme původní canvas, pokud máme náš krásný HTML text */
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content.ptk-own-count flash-label.quantity-label canvas {
+  visibility: hidden !important;
+}
+
+/* 4. Počty zásob (čísla nad ikonkami) - UPRAVUJ JEN TADY NAHOŘE */
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content {
+  /* STÍN herních čísel: víc vrstev = víc stínu (každá vrstva: drop-shadow(0 0 <rozmazání> <barva>)) */
+  --count-canvas-shadow: drop-shadow(0 0 1px #000) drop-shadow(0 0 1.5px rgba(0,0,0,.8)) drop-shadow(0 0 2px rgba(0,0,0,.4));
+  --count-color: #fafaf6;              /* barva čísla */
+  --count-color-cd: #999999;           /* barva při cooldownu / zamčeno */
+  --count-size: 9px;                   /* velikost (původně 14px) */
+  --count-weight: normal;                 /* normal / bold */
+  --count-font: "Segoe UI", Arial, Helvetica, sans-serif;   /* hladší, kulatější číslice než Tahoma */
+  --count-gap: 2px;                    /* vzdálenost nad ikonkou */
+  --count-x: 0px;                      /* posun doleva(-) / doprava(+) */
+  --count-bold: 0.3px;                 /* lehké ztučnění tenkých tahů, aby číslice byly plně bílé (0 = vypnout) */
+  --count-glow: 1.2px;                 /* měkký tmavý stín kolem číslic (0 = vypnout) */
+  --count-outline: 0px;                /* ostrý černý obrys kolem číslic (0 = vypnout, zkus 1px) */
+}
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content .ptk-count {
+  display: none;
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + var(--count-gap));
+  transform: translateX(calc(-50% + var(--count-x)));
+  z-index: 9999;
+  font-family: var(--count-font);
+  font-size: var(--count-size);
+  font-weight: var(--count-weight);
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
+  color: var(--count-color);           /* (JS čte tuhle barvu a vykreslí s ní číslo do malého canvasu) */
+}
+/* samotné číslo: malý canvas vykreslený ve vyšším rozlišení a hladce zmenšený (content.js, paintCount) */
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content .ptk-count canvas {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+  image-rendering: auto !important;
+}
+
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content.ptk-own-count .ptk-count {
+  display: block;
+}
+
+/* Šedá barva počtu kusů při cooldownu nebo zamknutí */
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content.ptk-cd .ptk-count,
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content.ptk-locked .ptk-count {
+  color: var(--count-color-cd);
+}
+
+/* Úplné zablokování jakýchkoliv herních přechodů, animací a blesků */
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot *,
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot *::before,
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot *::after,
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content *,
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content *::before,
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* Skrytí jakýchkoliv nechtěných herních efektových vrstev uvnitř slotu (kromě ikonky, čísel a našich vrstev) */
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content > :not(img.inventory-icon):not(flash-label):not(svg.cooldown-mask):not(.ptk-count):not(.ptk-cover):not(.ptk-cd-fg):not(.ptk-fill):not(.ptk-lo):not(.ptk-hi):not(.ptk-beam) {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* Key hint (1-5): bottom-right inside the tile */
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content flash-label.slot-number {
+  left: auto;
+  top: auto;
+  right: 3px;
+  bottom: 1px;
+}
+
+/* Active supply colours */
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content[data-ptk="repair"] { --ptk-colour: rgba(140, 198, 63, 0.75); --ptk-icon: #8cc63f; --ptk-light: #a3d655; }
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content[data-ptk="armor"] { --ptk-colour: rgba(245, 162, 92, 0.75); --ptk-icon: #e1a261; --ptk-light: #e1a261; }
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content[data-ptk="damage"] { --ptk-colour: rgba(253, 67, 24, 0.75); --ptk-icon: #fe662d; --ptk-light: #fe662d; }
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content[data-ptk="speed"] { --ptk-colour: rgba(253, 199, 0, 0.75); --ptk-icon: #fee600; --ptk-light: #fee600; }
+
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content[data-ptk] .cooldown-mask { visibility: hidden; }
+
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content .ptk-cover {
+  display: none;
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  width: 36px;
+  height: 36px;
+  border-radius: 3.5px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content.ptk-cd .ptk-cover,
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content.ptk-locked .ptk-cover {
+  display: block;
+  left: 0;
+  top: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 5.5px;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content .ptk-cd-fg {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 40px;
+  height: 40px;
+  background-size: 40px 40px;
+  background-repeat: no-repeat;
+  filter: brightness(0.47);
+  z-index: 3;
+  pointer-events: none;
+}
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content.ptk-tile-cd .ptk-cd-fg {
+  display: block;
+}
+
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content .ptk-fill {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 5.5px;
+  pointer-events: none;
+}
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content.ptk-on .ptk-fill { display: block; background: var(--ptk-colour); }
+
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content .ptk-lo,
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content .ptk-hi {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 40px;
+  height: 40px;
+  pointer-events: none;
+  -webkit-mask-size: 40px 40px;
+  mask-size: 40px 40px;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content.ptk-on .ptk-lo { display: block; background: var(--ptk-icon, var(--ptk-colour)); }
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content.ptk-on .ptk-hi { display: block; background: var(--ptk-light); z-index: 2; }
+
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content.ptk-on flash-label.slot-number {
+  visibility: hidden;
+}
+
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content.ptk-cd flash-label.slot-number,
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content.ptk-locked flash-label.slot-number {
+  visibility: hidden;
+}
+
+/* Repair kit: the symbol flickers while it heals (content.js toggles ptk-symbol-off) */
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content.ptk-symbol-off .ptk-lo,
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content.ptk-symbol-off .ptk-hi {
+  opacity: 0.12;
+}
+
+/* Colour flash on the tile (SVG filter set by content.js through --ptk-splash) */
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content[data-ptk] { filter: var(--ptk-splash, none) !important; }
+
+/* "Ready" beam: coloured light column growing up out of the tile */
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content .ptk-beam {
+  display: none;
+  position: absolute;
+  left: 0;
+  bottom: 2px;
+  width: 40px;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Key hint (1-5) is hidden while the colour flash is on the tile */
+:where(html:not([data-ptk-off])) .inventory-panel .inventory-slot-content.ptk-flash flash-label.slot-number {
+  visibility: hidden;
+}
