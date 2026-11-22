@@ -19,7 +19,7 @@ If a game update breaks it, the extension turns itself off and the game goes bac
 ## Install (Chrome, Edge, Brave, Opera)
 1. Download the ZIP from Releases and extract it.
 2. Go to `chrome://extensions` (Edge: `edge://extensions`) and turn on Developer mode.
-3. Click Load unpacked and pick the extracted folder (the one with manifest.json in it).
+3. Click Load unpacked and pick the extracted folder named "New Supplies".
 4. Refresh the game (Ctrl+F5).
 
 To update, replace the folder with the new version and hit the reload button on the extension.
