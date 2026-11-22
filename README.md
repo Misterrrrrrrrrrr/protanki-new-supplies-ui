@@ -1,6 +1,6 @@
 # ProTanki New Supplies UI & Box Textures
 
-Browser extension for play-protanki.com that changes how the supplies bar and the boxes look.
+Browser extension for [play-protanki.com](https://pro-tanki.online/en) that changes how the supplies bar and the boxes look.
 
 It only changes the look. Supplies, cooldowns and everything else in the game work exactly the same, the extension just draws them differently.
 
