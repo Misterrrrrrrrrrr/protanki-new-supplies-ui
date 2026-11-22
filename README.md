@@ -17,7 +17,7 @@ Everything is plain JavaScript and CSS, you can read it here. It only runs on th
 ## Install (Chrome, Edge, Brave, Opera etc.)
 1. Download the ZIP from Releases and extract it.
 2. Go to `chrome://extensions` (Edge: `edge://extensions`, Brave: `brave://extensions`) or open the extensions menu of your browser, and turn on **Developer mode**. It's usually in the top right corner (in Edge it's in the left sidebar).
-3. Click **Load unpacked folder** and pick the extracted folder "New Supplies".
+3. Click **Load unpacked** and pick the extracted folder named "New Supplies".
 4. If you are already in game, refresh it with Ctrl+F5.
 
 Don't delete or move the folder afterwards, the browser loads the extension from it.
