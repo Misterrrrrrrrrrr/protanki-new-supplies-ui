@@ -17,12 +17,12 @@ Everything is plain JavaScript and CSS, you can read it here. It only runs on pl
 If a game update breaks it, the extension turns itself off and the game goes back to looking normal.
 
 ## Install (Chrome, Edge, Brave, Opera)
-1. Download the ZIP from Releases and unzip it.
+1. Download the ZIP from Releases and extract it.
 2. Go to `chrome://extensions` (Edge: `edge://extensions`) and turn on Developer mode.
-3. Click Load unpacked and pick the unzipped folder (the one with manifest.json in it).
+3. Click Load unpacked and pick the extracted folder (the one with manifest.json in it).
 4. Refresh the game (Ctrl+F5).
 
 To update, replace the folder with the new version and hit the reload button on the extension.
 
 ## Something not working?
-Press F12 in a battle and look in the console for a line starting with `[New Supplies] self-check:`. If something broke after a game update, open an issue and paste that line.
+Press F12 in a battle and look in the console for a line starting with `[New Supplies] self-check:`.
